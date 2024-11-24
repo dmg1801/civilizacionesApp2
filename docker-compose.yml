@@ -9,6 +9,8 @@ services:
     stdin_open: true
 
   backend:
+    volumes:
+      - ./uploads:/app/uploads
     build:
       context: ./backend
     ports:
