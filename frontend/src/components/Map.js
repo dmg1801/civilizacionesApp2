@@ -72,8 +72,8 @@ const Map = () => {
   
     return L.icon({
       iconUrl: fullImageUrl, // Asegúrate de que sea la URL completa
-      iconSize: [50, 50],    // Tamaño del icono
-      iconAnchor: [25, 50],  // Ancla del icono (centro inferior)
+      iconSize: [30, 30],    // Tamaño del icono
+      iconAnchor: [15, 40],  // Ancla del icono (centro inferior)
     });
   };
 
@@ -143,71 +143,84 @@ const Map = () => {
         <input type="file" name="image" onChange={handleImageChange} />
         <button type="submit">Agregar Civilización</button>
       </form>
-      <MapContainer center={[0, 0]} zoom={2} style={{ height: '500px', width: '100%' }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap contributors"
-        />
-        {civilizations.map((civ) => (
-          <Marker
-            key={civ.id}
-            position={[civ.latitude, civ.longitude]}
-            icon={createCustomIcon(civ.image)} // Usar icono personalizado
-          >
-            <Popup>
-              <div>
-                <h3>{civ.name}</h3>
-                <p>{civ.description}</p>
-                <img
-                  src={`http://localhost:3001${civ.image}`}
-                  alt={civ.name}
-                  style={{ width: '100px', height: '100px' }}
-                />
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleEditCivilization(civ.id, {
-                      name: civ.name,
-                      description: civ.description,
-                      latitude: civ.latitude,
-                      longitude: civ.longitude,
-                      image: civ.newImage,
-                    });
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Nuevo nombre"
-                    defaultValue={civ.name}
-                    onChange={(e) => (civ.name = e.target.value)}
+      <div style={{ height: '80vh', width: '100%' }}>
+        <MapContainer 
+          center={[0, 0]} 
+          zoom={2} 
+          style={{ flex: 1, height: '100%' }}
+          maxBounds={[
+            [-90, -180], 
+            [90, 180], 
+          ]}
+          maxBoundsViscosity={1.0} 
+          minZoom={2} 
+          maxZoom={5}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&copy; OpenStreetMap contributors"
+          />
+          {civilizations.map((civ) => (
+            <Marker
+              key={civ.id}
+              position={[civ.latitude, civ.longitude]}
+              icon={createCustomIcon(civ.image)}
+            >
+              <Popup>
+                <div>
+                  <h3>{civ.name}</h3>
+                  <p>{civ.description}</p>
+                  <img
+                    src={`http://localhost:3001${civ.image}`}
+                    alt={civ.name}
+                    style={{ width: '100px', height: '100px' }}
                   />
-                  <textarea
-                    placeholder="Nueva descripción"
-                    defaultValue={civ.description}
-                    onChange={(e) => (civ.description = e.target.value)}
-                  />
-                  <input
-                    type="number"
-                    placeholder="Nueva latitud"
-                    defaultValue={civ.latitude}
-                    onChange={(e) => (civ.latitude = parseFloat(e.target.value))}
-                  />
-                  <input
-                    type="number"
-                    placeholder="Nueva longitud"
-                    defaultValue={civ.longitude}
-                    onChange={(e) => (civ.longitude = parseFloat(e.target.value))}
-                  />
-                  <input type="file" onChange={(e) => (civ.newImage = e.target.files[0])} />
-                  <button type="submit">Guardar Cambios</button>
-                </form>
-                <button onClick={() => handleDeleteCivilization(civ.id)}>Eliminar</button>
-              </div>
-            </Popup>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleEditCivilization(civ.id, {
+                        name: civ.name,
+                        description: civ.description,
+                        latitude: civ.latitude,
+                        longitude: civ.longitude,
+                        image: civ.newImage,
+                      });
+                    }}
+                  >
+                    <input
+                      type="text"
+                      placeholder="Nuevo nombre"
+                      defaultValue={civ.name}
+                      onChange={(e) => (civ.name = e.target.value)}
+                    />
+                    <textarea
+                      placeholder="Nueva descripción"
+                      defaultValue={civ.description}
+                      onChange={(e) => (civ.description = e.target.value)}
+                    />
+                    <input
+                      type="number"
+                      placeholder="Nueva latitud"
+                      defaultValue={civ.latitude}
+                      onChange={(e) => (civ.latitude = parseFloat(e.target.value))}
+                    />
+                    <input
+                      type="number"
+                      placeholder="Nueva longitud"
+                      defaultValue={civ.longitude}
+                      onChange={(e) => (civ.longitude = parseFloat(e.target.value))}
+                    />
+                    <input type="file" onChange={(e) => (civ.newImage = e.target.files[0])} />
+                    <button type="submit">Guardar Cambios</button>
+                  </form>
+                  <button onClick={() => handleDeleteCivilization(civ.id)}>Eliminar</button>
+                </div>
+              </Popup>
 
-          </Marker>
-        ))}
-      </MapContainer>
+            </Marker>
+          ))}
+        </MapContainer>
+      </div>
     </div>
   );
 };
