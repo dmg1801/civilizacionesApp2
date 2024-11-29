@@ -4,12 +4,15 @@ services:
     build:
       context: ./frontend
     volumes:
-      - ./frontend:/app 
+      - type: bind
+        source: ./frontend
+        target: /app
       - /app/node_modules 
     ports:
       - "3000:3000" 
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_PRINT_LOGS=true
     command: npm start 
 
   backend:

@@ -111,7 +111,7 @@ const Map = () => {
 
   return (
     <div>
-      <h1>Mapa de Civilizaciones</h1>
+      <h1>Civilizaciones</h1>
       <form onSubmit={handleAddCivilization}>
         <input
           type="text"
